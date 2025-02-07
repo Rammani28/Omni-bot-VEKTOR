@@ -9,7 +9,7 @@ class BotDirectionPublisher(Node):
         super().__init__('bot_direction_publisher') # node name
         self.publisher = self.create_publisher(msg_type=String, topic='/bot_direction', qos_profile=10) # data of type string, publish to topic /bot_direction, qos_profile read here https://docs.ros.org/en/rolling/Concepts/Intermediate/About-Quality-of-Service-Settings.html#qos-profiles
         self.subscription = self.create_subscription(msg_type=Joy, topic='/joy', callback=self.joy_callback, qos_profile=10) # subscribe to /Joy node
-        self.get_logger().info("LED publisher Node initialized. listening to joystick input...")
+        self.get_logger().info("Bot Direction Node initialized. listening to joystick input...")
 
     def joy_callback(self, msg):
         """0, 1, 3 are the index of joy sticks in message published by /joy"""
