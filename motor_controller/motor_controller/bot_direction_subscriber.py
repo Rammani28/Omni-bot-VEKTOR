@@ -3,10 +3,13 @@ from rclpy.node import Node
 from std_msgs.msg import String
 import serial
 from motor_controller.utils import target_wheel_rpm
+from motor_controller.recorder import Recorder
 from motor_controller.motor2 import Motor
 
-ser = serial.Serial("/dev/serial0", baudrate=115200, timeout=0)
 
+
+ser = serial.Serial("/dev/serial0", baudrate=115200, timeout=0)
+recorder = Recorder()
 
 class PwmSubscriberNode(Node):
     def __init__(self):
@@ -34,12 +37,9 @@ class PwmSubscriberNode(Node):
             return
 
         if start:
-            
             rpms_pico = ser.readline().decode().strip()  # Read and decode
-            print(rpms_pico)
-
             if rpms_pico:
-                
+                print("-------------------------------")
                 print("angle", theta, wbz)
                 try:
                     rpm1, rpm2, rpm3 = [float(rpm) for rpm in rpms_pico.split(',')] #is in pwm value 
@@ -54,6 +54,7 @@ class PwmSubscriberNode(Node):
                 self.motor1.rotate(u1, rpm1)
                 self.motor2.rotate(u2, rpm2)
                 self.motor3.rotate(u3, rpm3)
+                recorder.record(u1, u2,u3,rpm1,rpm2,rpm3)
                 print()
 
 
@@ -70,6 +71,7 @@ def main(args=None):
     except KeyboardInterrupt:
         pass
     finally:
+        recorder.print_record()
         node.destroy_node()
         rclpy.shutdown()
 
