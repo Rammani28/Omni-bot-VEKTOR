@@ -15,16 +15,22 @@ class BotDirectionPublisher(Node):
         """0, 1, 3 are the index of joy sticks in message published by /joy"""
         strafe_x = msg.axes[0]  
         strafe_y = msg.axes[1]  
-        rotational_omega = msg.axes[3] * -1  
-        wbz = rotational_omega
+        rotate_x = msg.axes[3]
+        angle = 501
+        wbz = 0
 
-        # Calculate the angle in degrees
-        angle = math.degrees(math.atan2(strafe_x, strafe_y))  # Swap arguments to adjust direction
-        angle = (360 - angle) % 360  # Normalize to 0-360
+        if strafe_x == 0 and strafe_y == 0: # if all values are 0, stop the bot
+            angle = 501
+        else:
+            angle = math.degrees(math.atan2(strafe_x, strafe_y))  # Swap arguments to adjust direction
+            angle = (360 - angle) % 360  # Normalize to 0-360
+
+        if abs(rotate_x) < 1:
+            wbz = 501
+        else:
+            wbz = rotate_x
 
         message_to_be_published = f"{angle:.2f},{wbz}"
-        if strafe_x == 0 and strafe_y == 0 and wbz == 0: # if all values are 0, stop the bot
-            message_to_be_published = "501"
         self.publish_message(message_to_be_published) # angle will be from 0 to 360, or 501
 
     def publish_message(self, msg):
