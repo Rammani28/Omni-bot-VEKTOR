@@ -4,6 +4,21 @@ from sensor_msgs.msg import Joy
 import rclpy
 from rclpy.node import Node
 
+def get_angle(strafe_x, strafe_y):
+    if strafe_x == 0 and strafe_y == 0: # if all values are 0, stop the bot
+            angle = 501
+    else:
+        angle = math.degrees(math.atan2(strafe_x, strafe_y))  # Swap arguments to adjust direction
+        angle = (360 - angle) % 360  # Normalize to 0-360
+    return angle
+
+def get_wbz(rotate_x):
+    if abs(rotate_x) < 1:
+        wbz = 501
+    else:
+        wbz = rotate_x
+    return wbz
+
 class BotDirectionPublisher(Node):
     def __init__(self):
         super().__init__('bot_direction_publisher') # node name
@@ -19,17 +34,9 @@ class BotDirectionPublisher(Node):
         angle = 501
         wbz = 0
 
-        if strafe_x == 0 and strafe_y == 0: # if all values are 0, stop the bot
-            angle = 501
-        else:
-            angle = math.degrees(math.atan2(strafe_x, strafe_y))  # Swap arguments to adjust direction
-            angle = (360 - angle) % 360  # Normalize to 0-360
-
-        if abs(rotate_x) < 1:
-            wbz = 501
-        else:
-            wbz = rotate_x
-
+        angle = get_angle(strafe_x, strafe_y)
+        wbz = get_wbz(rotate_x)
+        
         message_to_be_published = f"{angle:.2f},{wbz}"
         self.publish_message(message_to_be_published) # angle will be from 0 to 360, or 501
 
