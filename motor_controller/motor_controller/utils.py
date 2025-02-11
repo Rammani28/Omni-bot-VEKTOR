@@ -1,3 +1,5 @@
+#utils.py
+
 from math import sin, cos
 
 PI = 3.14159265359
@@ -32,12 +34,15 @@ def target_wheel_rpm(theta:float, wbz:float) -> tuple:
     u3 = (-D*wbz - 0.5*vbx + 0.866*vby) / R * ( 60 / (2 * PI))
     return u1, u2, u3 # return the target rpm of each wheel 
 
-def rpm_to_pwm(rpm, max_rpm= 300, min_rpm=0, max_pwm=100, min_pwm=10):
+def rpm_to_pwm(rpm, max_rpm= 300, min_rpm=0, max_pwm=70, min_pwm=0):
     # return max(min(rpm / max_rpm * 100, 100), 0) # It had worked before
     x = (rpm - min_rpm)/ (max_rpm - min_rpm) * (max_pwm-min_pwm)
     x =max(min(x, max_pwm), 0)
+    print(f"x={x}")
     return x
 
 # class DataLogger(:
 #     def __init__(self, 'name'):
 #         self.filename = 
+
+print(target_wheel_rpm(0, 0))

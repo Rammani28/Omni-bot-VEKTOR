@@ -22,7 +22,7 @@ class PIDController:
         self.last_error = self.error
         
         # Prevent integral wind-up
-        # self.integral = max(min(self.integral, self.max_output / self.Ki), -self.max_output / self.Ki)
+        self.integral = max(min(self.integral, self.max_output / self.Ki), -self.max_output / self.Ki)
         # self.integral = 0
         
         self.output = self.Kp * self.error + self.Ki * self.integral + self.Kd * self.derivative
@@ -32,9 +32,10 @@ class PIDController:
         return self.output
 
 class Motor:
-    def __init__(self, in1=5, in2=6, name="motor1"):
+    def __init__(self, in1=5, in2=6, name="motor1", corr_factor=1):
         self.in1 = in1
         self.in2 = in2
+        self.corr_factor = corr_factor
         self.name = name
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.in1, GPIO.OUT)
@@ -43,7 +44,9 @@ class Motor:
         self.pwm_in2 = GPIO.PWM(self.in2, 1000)
         self.pwm_in1.start(0)
         self.pwm_in2.start(0)
-        self.pid_controller = PIDController()
+        # self.pid_controller = PIDController()
+        self.pid_controller = None
+
 
     def stop(self):
         self.pwm_in1.ChangeDutyCycle(0)
@@ -57,16 +60,16 @@ class Motor:
         self.pwm_in1.ChangeDutyCycle(0)
         self.pwm_in2.ChangeDutyCycle(pwm_value)
     
-    def rotate(self, u_n, rpm_n):
+    def rotate(self, u_n, rpm_n=0):
         target_rpm = abs(u_n)
         rpm_from_pid = self.pid_controller.compute(target_rpm, rpm_n)
         error_rpm = rpm_from_pid
-        pwm = rpm_to_pwm(abs(rpm_n) + error_rpm)
-        print(f"pwm:{pwm:.2f}\t")
+        pwm = rpm_to_pwm(target_rpm + error_rpm)
         (self.rotate_backward if u_n < 0 else self.rotate_forward)(pwm)
+
 
     def destroy(self):
         self.pwm_in1.stop()
         self.pwm_in2.stop()
         GPIO.cleanup()
-        print("GPIO cleaned up")
+    
