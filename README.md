@@ -17,7 +17,7 @@ ros2 launch vektor vektor_launch.py
 ```
 ### Note:
 * Pressing r2 button of joystick is compulsory for the bot to move. 
-* gpio pins used for motors are defined in motor_ccontrol.py
+* gpio pins used for motors are defined in vektor/vektor/motor_control.py
 * pins used for sensors are defined in main.py which lies in pico_code_dump/ .
 * UART protocol is used for communication between pi and pico, at baudrate 115200.
 * concepts of state machines and gray codes is used.
