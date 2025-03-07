@@ -1,5 +1,5 @@
 # Description
-This repo contains all the codes required for VEKTOR bot. VEKTOR bot is a six wheeled omnidirectional robot, which uses three omniwheels to drive the bot, while other three wheels to implement odometry. We have used linear odometry due to its simplicity.
+This repo contains all the codes required for VEKTOR bot. VEKTOR bot is a six wheeled omnidirectional robot, which uses three omniwheels to drive the bot, while other three wheels to implement odometry. We have used linear odometry due to its simplicity. We have used ROS2 humble in this project.
 
 # How to use 
 * you might need to contact me to actually use this code, as this is an implementation of our custom hardware project.
