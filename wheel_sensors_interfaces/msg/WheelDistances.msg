@@ -1,0 +1,3 @@
+float64 dead_wheel_left
+float64 dead_wheel_right
+float64 dead_wheel_back

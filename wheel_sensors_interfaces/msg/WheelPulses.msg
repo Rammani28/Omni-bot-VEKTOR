@@ -1,0 +1,3 @@
+int64 pulse_left
+int64 pulse_right
+int64 pulse_back
