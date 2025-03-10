@@ -8,7 +8,7 @@ This repo contains all the codes required for VEKTOR bot. VEKTOR bot is a six wh
 
 * On pi machine, run the following
 ```
-git clone https://github.com/Rammani28/motor_control_ws2.git
+git clone https://github.com/Rammani28/Omni-bot-VEKTOR.git
 # rosdep init # or similar command to install/manage dependencies
 cd ~/ros_ws # your ros workspace
 colcon build --symlink-install
